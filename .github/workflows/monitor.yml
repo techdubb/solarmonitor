@@ -1,0 +1,49 @@
+name: Solar monitor
+
+on:
+  schedule:
+    # Every 15 minutes = 96 calls/day, well under SolarEdge's 300/day limit.
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}  # allow manual runs from the Actions tab
+
+# Never let two checks overlap.
+concurrency:
+  group: solar-monitor
+  cancel-in-progress: false
+
+permissions:
+  contents: write  # needed to commit state.json back to the repo
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Run monitor
+        env:
+          SOLAREDGE_API_KEY: ${{ secrets.SOLAREDGE_API_KEY }}
+          SOLAREDGE_SITE_ID: ${{ secrets.SOLAREDGE_SITE_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python monitor.py
+
+      - name: Persist state if it changed
+        if: success()
+        run: |
+          if ! git diff --quiet -- state.json; then
+            git config user.name  "solar-monitor-bot"
+            git config user.email "solar-monitor-bot@users.noreply.github.com"
+            git add state.json
+            git commit -m "chore: update monitor state [skip ci]"
+            git push
+          else
+            echo "No state change."
+          fi

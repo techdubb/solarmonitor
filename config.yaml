@@ -1,0 +1,35 @@
+# Non-secret configuration for the solar monitor.
+# Secrets (API key, site id, Telegram token/chat) come from environment
+# variables, set as GitHub Secrets in the workflow. See README.md.
+
+# --- Your site's location (used to know when the sun is up) ---
+# Fill these in for your array. Find lat/lon from Google Maps; timezone
+# is an IANA name like "America/New_York" or "America/Los_Angeles".
+location:
+  latitude: 0.0
+  longitude: 0.0
+  timezone: "America/New_York"
+
+# --- Detection thresholds ---
+detection:
+  # Sun must be at least this many degrees above the horizon before we
+  # expect meaningful production. Below this, checks are skipped (night/dawn).
+  min_sun_elevation_deg: 12
+
+  # Production at or below this many watts during daylight counts as "no output".
+  low_power_watts: 50
+
+  # If the site's lastUpdateTime is older than this (during daylight), the
+  # system is considered offline / not reporting.
+  stale_data_hours: 2
+
+  # A DOWN condition must persist this many consecutive daytime checks before
+  # we alert (at 15-min cadence, 3 = ~45 min). Filters out passing clouds.
+  confirm_checks: 3
+
+  # While still down, send at most one reminder per this many hours.
+  reminder_interval_hours: 24
+
+  # If the SolarEdge API itself is unreachable for this many consecutive
+  # checks, alert that the monitor can't see the site (distinct from DOWN).
+  api_failure_alert_after: 4
