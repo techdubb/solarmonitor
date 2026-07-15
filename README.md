@@ -31,6 +31,16 @@ In the [SolarEdge monitoring portal](https://monitoring.solaredge.com):
 **Admin → Site Access → API Access** → accept the terms → copy the **Site ID**
 and generate/copy the **API key** (site-level is enough).
 
+What each looks like (so you don't mix them up):
+
+| Value | Format | Example |
+|---|---|---|
+| `SOLAREDGE_SITE_ID` | plain integer, ~6–7 digits (no dashes/letters) | `1234567` |
+| `SOLAREDGE_API_KEY` | 32-character alphanumeric string | `L4QLVQ1LOKCQX2193VSEICXW61NP6B1O` |
+
+The Site ID also appears in the portal URL while viewing your system —
+`.../site/1234567/...`.
+
 ### 2. Create a Telegram bot + get your chat ID
 1. In Telegram, message **@BotFather** → `/newbot` → copy the **bot token**.
 2. Send any message to your new bot, then visit
