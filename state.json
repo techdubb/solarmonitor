@@ -1,6 +1,6 @@
 {
   "status": "OK",
-  "consecutive_down": 0,
+  "consecutive_down": 1,
   "consecutive_api_failures": 0,
   "api_alerted": false,
   "down_since": null,
