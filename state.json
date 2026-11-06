@@ -1,7 +1,7 @@
 {
   "status": "OK",
   "consecutive_down": 0,
-  "consecutive_api_failures": 9,
+  "consecutive_api_failures": 10,
   "api_alerted": true,
   "down_since": null,
   "last_reminder": null
